@@ -1,2 +1,2 @@
 # AutoBlind
-automated IKEA:FRIDANS blind, thorugh ESP32 32 webserver
+Automated IKEA:FRIDANS blind, using ESP32 32 webserver
