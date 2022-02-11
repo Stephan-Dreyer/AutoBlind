@@ -4,6 +4,9 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
+//define wifi particulars
+const char *ssid = "";
+const char *password = "";
 // define pins
 int motor_speed= 18 ;// pins for motor control
 int control_1=17;
@@ -20,13 +23,12 @@ int led =2;
 
 // Define Global Variables
 //variables for timing
-int period = 10000;
+int period = 10000;//how often NTP is polled for time
 unsigned long time_now = 0;
 int current_time;
 int tracker = 100;
 int alarm_hour = 9;
 int alarm_min = 0;
-//struct tm timeinfo; possibly redundant
 String alarm_str = "9:00";
 
 // counters to measure blind position
@@ -57,13 +59,11 @@ uint8_t dim_factor = 3;
 int R = 0;
 int G = 0;
 int B = 0;
-int color_state[] = {0, 0, 0}; // for remembering the light color when they turn off during blind usage
+int color_state[] = {0, 0, 0}; // for remembering the light color when they turn off during blind usage, as both cannot run due to power constraints
 
-//define wifi particulars
-const char *ssid = "";
-const char *password = "";
+//initialise webserver and wifi
 WebServer server(80);
-WiFiClient client;
+//WiFiClient client;
 
 
 // initialise timers 
@@ -71,6 +71,7 @@ hw_timer_t *timing = NULL;
 hw_timer_t *debounce_time = NULL;
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 portMUX_TYPE debounceMux = portMUX_INITIALIZER_UNLOCKED;
+
 //ISR for  encoder switch
 void IRAM_ATTR onTimer()
 {
@@ -113,11 +114,11 @@ void endTimer()
 // Debounce routine for encoder switch isr.
 uint8_t switch_click(void)
 {
-  static uint16_t btndbc = 0, lastb = 0;
-  btndbc = (btndbc << 1) | digitalRead(15) | 0xe000;
-  lastb = btndbc;
-  if (btndbc == 0xf000)
+  static uint16_t state_register = 0;
+  state_register = (state_register << 1) | digitalRead(15) | 0xe000;
+  if (state_register == 0xf000)
   {
+    // if going up subtract if down add
     if (up_toggle || up_toggle_full)
       ticks--;
     if (down_toggle || down_toggle_full)
@@ -162,7 +163,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 36000, 60000);
 void setup()
 {
   //begin Serial for debugging
-  Serial.begin(125200);
+  Serial.begin(115200);
   // setup pinmodes
   pinMode(motor_speed, OUTPUT);
   pinMode(control_1, OUTPUT);
@@ -185,7 +186,7 @@ void setup()
   //digitalWrite(motor_speed,HIGH);
   digitalWrite(control_1, HIGH);
   digitalWrite(control_2, HIGH);
-  // setup pwm to control motor speed, needs to be implemented in hardware first
+  // setup pwm to control motor speed, needs to be implemented in hardware first(currently pin just pulled high)
   ledcSetup(4, 4000, 8);
   ledcAttachPin(motor_speed, 4);
 
@@ -336,6 +337,7 @@ int wind_up_full()
   //check if not at the top
   if (tracker + 1 > 1)
   {
+  
     Serial.println(tracker);
     wind_up();
     tracker = floor(((double)ticks / (double)required_ticks) * 100);// calculate position of the blind
@@ -473,7 +475,7 @@ void rave()
     prev_time = time_now;
   }
 }
-//pulses lights red as if in a raid bunker
+//pulses lights red as if in a bunker( thought this would be cool but its quite underwelming)
 void raid()
 {
   static int R = 0;
@@ -647,6 +649,7 @@ void loop()
     }
   }
   server.handleClient();
+  
   // check if blind activity flag is active
   if (is_active)
   {
