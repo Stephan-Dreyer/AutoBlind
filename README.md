@@ -1,6 +1,6 @@
 <h1>AutoBlind</h1>
 
-<h3>Automated IKEA: FRIDANS blind, using ESP32 32 webserver</h3>
+<h3>Automated IKEA: FRIDANS blind, using ESP32 webserver</h3>
 <p>This is a roller style blind and was automated to be controlled through a webserver hosted on an ESP32. It's programmed to automatically open and close at set times of day & the opeing time can be set within the hosted interface to act as a alarm in the morning. The position of the blind is measured using a limit switch based  encoding system. As the the motor rotates, the gear attached clicks the switch, thus this can be used to measure how much the motor has rotated, and by extention the blind, has moved. All aspects of the Blind can be controlled through the web interface from any device connected to the same wifi network. A set of hardware controls were also implemented in the form of a set of a switch pannel but the funcitonality is more limited. A RGB LED Driver was also developed to control an RGB LED strip, with 8 bit colour resolution,to provide aditional lighting. These LEDs can be contolled using both the software and hardware controls.</p>
 
 ![gif](https://user-images.githubusercontent.com/63902709/153567206-497ebd32-34aa-4b36-82b5-bed5925055f1.gif)
