@@ -27,7 +27,7 @@
 <li>1x DPDT Momentary toggle switch
 <li>1x SPDT Toggle Switch
 <li>1x RGB LED 
-<l>1x Momentary Switch
+<li>1x Momentary Switch
 <li>1x YG2732 Gear motor
  <li>3D printed gears and mounting brackets
 </ul>
