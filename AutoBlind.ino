@@ -27,9 +27,9 @@ int period = 10000;//how often NTP is polled for time
 unsigned long time_now = 0;
 int current_time;
 int tracker = 100;
-int alarm_hour = 9;
+int alarm_hour = 8;
 int alarm_min = 0;
-String alarm_str = "9:00";
+String alarm_str = "8:00";
 
 // counters to measure blind position
 int required_ticks = 310;
@@ -255,19 +255,18 @@ void wind_stop()
   {
     morn_alarm_trig = LOW;
     alarm_min = 0;
-    alarm_hour = 9;
-    alarm_str = "9:00";
+    alarm_hour = 8;
+    alarm_str = "8:00";
     //reset any previously stored colorstates
     for (int i = 0; i < 3; i++)
       color_state[i] = 0;
   }
   //turn lights back on after blind has stoped
   color(color_state[0], color_state[1], color_state[2], dim_factor);
-  // reset night alarm and turn lights on
+  // reset night alarm 
   if (night_alarm_trig)
   {
     night_alarm_trig = LOW;
-    color(255, 255, 255, dim_factor);
   }
 }
 // wind blind up 10%
@@ -591,6 +590,8 @@ void manual_switch()
       blind_cancel();
       light_off();
       wind_stop();
+      color(0,0,0, dim_factor);
+    
     }
     if (digitalRead(down_sw) == LOW)
     {
@@ -635,8 +636,11 @@ void loop()
         startTimer();
       }
     }
+  if (hh == 17 && mm == 00 && ss > 30)color(255, 255, 255, dim_factor);
+
+    
 // check for night alarm
-    if (hh == 17 && mm == 30 && ss > 30)
+    if (hh == 19 && mm == 00 && ss > 30)
     {
       alarm_toggle = HIGH;
       if (!down_toggle_full)

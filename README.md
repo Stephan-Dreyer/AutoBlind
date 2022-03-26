@@ -32,14 +32,5 @@
  <li>3D printed gears and mounting brackets
 </ul>
  
-  
- <h4>To Do:<h4>
-  <ul>
-  <li>Store Blind position In EEPROM to avoid posiiton loss when device is reset 
-    <li>Investigate and develop better encoding system
-      <li> implement neccesary connections in Hardware to allow motor speed control
-        <li> Upgrade motor to brushless to reduce noise (would need to replace H-bridge with ESC)
-  </ul>
-  
-  
+
 
